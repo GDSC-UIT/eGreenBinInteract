@@ -3,6 +3,7 @@ import 'package:egreenbin_interact/pages/camera_page/controller/scan_controller.
 import 'package:egreenbin_interact/util/app_colors.dart';
 import 'package:egreenbin_interact/util/image_asset.dart';
 import 'package:egreenbin_interact/widgets/app_button.dart';
+import 'package:egreenbin_interact/widgets/camera_viewer.dart';
 import 'package:egreenbin_interact/widgets/header.dart';
 import 'package:egreenbin_interact/widgets/non_faceLabel.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,6 +65,7 @@ class CameraScreen extends GetView<ScanController> {
                           const SizedBox(
                             height: 16,
                           ),
+                          const CameraViewer(),
                           const SizedBox(
                             height: 25,
                           ),
@@ -130,7 +132,10 @@ class CameraScreen extends GetView<ScanController> {
                       alignment: Alignment.bottomRight,
                       child: Image.asset(Assets.binImg),
                     ),
-
+                    // TextButton(
+                    //   onPressed: controller.resetImage,
+                    //   child: const Text("reset image"),
+                    // ),
                     // controller.imageTake.value != ""
                     //     ? Image.file(controller.imageTake.value)
                     //     : Container(),
