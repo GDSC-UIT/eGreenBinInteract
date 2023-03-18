@@ -4,6 +4,7 @@ import 'package:egreenbin_interact/util/app_colors.dart';
 import 'package:egreenbin_interact/util/image_asset.dart';
 import 'package:egreenbin_interact/widgets/app_button.dart';
 import 'package:egreenbin_interact/widgets/camera_viewer.dart';
+import 'package:egreenbin_interact/widgets/got_faceLabel.dart';
 import 'package:egreenbin_interact/widgets/header.dart';
 import 'package:egreenbin_interact/widgets/non_faceLabel.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,7 +62,9 @@ class CameraScreen extends GetView<ScanController> {
                           const SizedBox(
                             height: 18,
                           ),
-                          NonFaceLabel(),
+                          !controller.isGotFace.value
+                              ? const NonFaceLabel()
+                              : const GotFaceLabel(),
                           const SizedBox(
                             height: 16,
                           ),
@@ -85,10 +88,15 @@ class CameraScreen extends GetView<ScanController> {
                             children: [
                               Column(
                                 children: [
-                                  AppButton(
-                                    onPressed: () async {},
-                                    color: AppColors.subPrimary,
-                                    image: Assets.recycleImg,
+                                  Visibility(
+                                    // visible: controller.trashLabel.value != "",
+                                    child: AppButton(
+                                      onPressed: () async {
+                                        //controller.handleAction("recycle");
+                                      },
+                                      color: AppColors.subPrimary,
+                                      image: Assets.recycleImg,
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 12,
@@ -105,10 +113,15 @@ class CameraScreen extends GetView<ScanController> {
                               ),
                               Column(
                                 children: [
-                                  AppButton(
-                                    onPressed: () async {},
-                                    color: AppColors.orange,
-                                    image: Assets.nonrecycleImg,
+                                  Visibility(
+                                    //visible: controller.trashLabel.value != "",
+                                    child: AppButton(
+                                      onPressed: () async {
+                                        //controller.handleAction("inrecycle");
+                                      },
+                                      color: AppColors.orange,
+                                      image: Assets.nonrecycleImg,
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 12,
