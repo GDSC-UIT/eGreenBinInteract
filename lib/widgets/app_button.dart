@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 class AppButton extends StatelessWidget {
   final Function onPressed;
   final Color color;
-  final String image;
+  final String? image;
+  final String? text;
 
-  const AppButton(
-      {super.key,
-      required this.image,
-      required this.onPressed,
-      required this.color});
+  const AppButton({
+    super.key,
+    this.image,
+    required this.onPressed,
+    required this.color,
+    this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,7 @@ class AppButton extends StatelessWidget {
         ),
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          child: Image.asset(image),
+          child: text == null ? Image.asset(image!) : Text(text!),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:egreenbin_interact/pages/camera_page/camera_page.dart';
 import 'package:egreenbin_interact/pages/camera_page/controller/global_bindings.dart';
+import 'package:egreenbin_interact/pages/connect_page/connect_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       initialBinding: GlobalBindings(),
       debugShowCheckedModeBanner: false,
       title: "Camera Application",
-      home: CameraScreen(),
+      home: ConnectPage(),
     );
   }
 }

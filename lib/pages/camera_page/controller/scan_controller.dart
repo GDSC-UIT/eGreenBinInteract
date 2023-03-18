@@ -17,9 +17,8 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:web_socket_channel/io.dart';
 
-const String espUrl = "ws://192.168.138.12:81";
-
 class ScanController extends GetxController {
+  String espUrl = "ws://192.168.138.12:81";
   late List<CameraDescription> _cameras;
   late CameraController _cameraController;
   final RxBool _isInitialized = RxBool(false);
@@ -41,12 +40,11 @@ class ScanController extends GetxController {
   int count = 1;
   RxString trashLabel = "".obs;
   AudioPlayer audioPlayer = AudioPlayer();
-  final channel = IOWebSocketChannel.connect(espUrl);
+  IOWebSocketChannel? channel;
 
   @override
   void onInit() {
     initCamera();
-    initEsp();
     super.onInit();
   }
 
@@ -59,35 +57,46 @@ class ScanController extends GetxController {
     super.dispose();
   }
 
-  void initEsp() {
-    channel.stream.listen(
-      (message) {
-        print('Received from MCU: $message');
-        String signal = message;
-        log("debug $signal");
-        if (signal == "0") {
-          return;
-        }
-        switch (signal) {
-          case "capture":
-            {
-              isTakeImage = true;
-              break;
-            }
-          default:
-            //catch trash label
-            log("here");
-            trashLabel.value = signal;
-        }
-      },
-      onDone: () {
-        //if WebSocket is disconnected
-        print("Web socket is closed");
-      },
-      onError: (error) {
-        print(error.toString());
-      },
-    );
+  void connectEsp(String espUrlInput) {
+    try {
+      espUrl = "ws://$espUrlInput:81";
+
+      print("url:$espUrl");
+
+      final channel = IOWebSocketChannel.connect(espUrl);
+      print("channel:$channel");
+      channel.stream.listen(
+        (message) {
+          print('Received from MCU: $message');
+          String signal = message;
+          log("debug $signal");
+          if (signal == "0") {
+            return;
+          }
+          switch (signal) {
+            case "capture":
+              {
+                isTakeImage = true;
+                break;
+              }
+            default:
+              //catch trash label
+              log("here");
+              trashLabel.value = signal;
+          }
+        },
+        onDone: () {
+          //if WebSocket is disconnected
+          print("Web socket is closed");
+        },
+        onError: (error) {
+          print(error.toString());
+          throw const FormatException("Input not correct");
+        },
+      );
+    } catch (e) {
+      print("$e");
+    }
   }
 
   void handleAction(choice) async {
@@ -109,9 +118,9 @@ class ScanController extends GetxController {
 
     try {
       if (data.isRight) {
-        channel.sink.add("right");
+        channel?.sink.add("right");
       } else {
-        channel.sink.add("left");
+        channel?.sink.add("left");
       }
 
       var response = await HttpService.postRequest(body: data.toJson());
