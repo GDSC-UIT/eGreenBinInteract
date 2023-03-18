@@ -1,4 +1,13 @@
+import 'dart:developer';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
+import 'package:egreenbin_interact/data/trashData.dart';
+import 'package:egreenbin_interact/models/Gabage.dart';
+import 'package:egreenbin_interact/util/app_colors.dart';
+import 'package:egreenbin_interact/util/http_Service.dart';
+import 'package:egreenbin_interact/widgets/pop_Incorrect.dart';
+import 'package:egreenbin_interact/widgets/popup_Correct.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'dart:io';
@@ -6,16 +15,20 @@ import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:web_socket_channel/io.dart';
+
+const String espUrl = "ws://192.168.1.71:81";
 
 class ScanController extends GetxController {
-  final RxBool _isInitialized = RxBool(false);
-  bool get isInitialized => _isInitialized.value;
   late List<CameraDescription> _cameras;
   late CameraController _cameraController;
-  CameraController get cameraController => _cameraController;
+  final RxBool _isInitialized = RxBool(false);
   CameraImage? _cameraImage;
-  bool _canProcess = true;
-  bool _isBusy = false;
+  Rx<File> imageTake = File("").obs;
+  CameraController get cameraController => _cameraController;
+  bool get isInitialized => _isInitialized.value;
+  RxBool isGotFace = false.obs;
+  bool isTakeImage = false;
   //create face detector object
   final FaceDetector _faceDetector = FaceDetector(
     options: FaceDetectorOptions(
@@ -23,15 +36,105 @@ class ScanController extends GetxController {
       enableClassification: true,
     ),
   );
-  bool isTakeImage = false;
-  RxBool isGotFace = false.obs;
-  Rx<File> imageTake = File("").obs;
-  RxString trashLabel = "".obs;
+  bool _canProcess = true;
+  bool _isBusy = false;
   int count = 1;
+  RxString trashLabel = "".obs;
+  AudioPlayer audioPlayer = AudioPlayer();
+  final channel = IOWebSocketChannel.connect(espUrl);
 
+  @override
+  void onInit() {
+    initCamera();
+    initEsp();
+    super.onInit();
+  }
+
+  @override
   void dispose() {
     _isInitialized.value = false;
+    _cameraController.dispose();
+    _canProcess = false;
+    _faceDetector.close();
     super.dispose();
+  }
+
+  void initEsp() {
+    channel.stream.listen(
+      (message) {
+        print('Received from MCU: $message');
+        String signal = message;
+        log("debug $signal");
+        if (signal == "0") {
+          return;
+        }
+        switch (signal) {
+          case "capture":
+            {
+              isTakeImage = true;
+              break;
+            }
+          default:
+            //catch trash label
+            log("here");
+            trashLabel.value = signal;
+        }
+      },
+      onDone: () {
+        //if WebSocket is disconnected
+        print("Web socket is closed");
+      },
+      onError: (error) {
+        print(error.toString());
+      },
+    );
+  }
+
+  void handleAction(choice) async {
+    Garbage data = Garbage(
+      code: "20521111",
+      name: "Huu Hieu",
+    );
+
+    //check action
+    if (choice == "recycle") {
+      if (Data[trashLabel]["isRecycle"]) {
+        data.isRight = true;
+      }
+    } else {
+      if (!Data[trashLabel]["isRecycle"]) {
+        data.isRight = true;
+      }
+    }
+
+    try {
+      if (data.isRight) {
+        channel.sink.add("right");
+      } else {
+        channel.sink.add("left");
+      }
+
+      var response = await HttpService.postRequest(body: data.toJson());
+      showEffect(data.isRight);
+      print("response: $response");
+    } catch (e) {
+      Get.snackbar(
+        "error occur",
+        "$e",
+        colorText: AppColors.red,
+        backgroundColor: AppColors.lightGrey,
+      );
+    }
+  }
+
+  void showEffect(isRight) async {
+    if (!isRight) {
+      await audioPlayer.play(AssetSource('audios/incorrect.mp3'));
+      Get.dialog(const PopupInCorrect());
+    } else {
+      await audioPlayer.play(AssetSource('audios/correct.mp3'));
+      Get.dialog(const PopupCorrect());
+    }
   }
 
   Future<void> initCamera() async {
@@ -93,7 +196,7 @@ class ScanController extends GetxController {
       inputImageData: inputImageData,
     );
 
-    //detect here
+    detectFace(inputImage);
   }
 
   Future<void> detectFace(final InputImage inputImage) async {
