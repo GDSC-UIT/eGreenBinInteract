@@ -17,7 +17,7 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:web_socket_channel/io.dart';
 
-const String espUrl = "ws://192.168.1.71:81";
+const String espUrl = "ws://192.168.138.12:81";
 
 class ScanController extends GetxController {
   late List<CameraDescription> _cameras;
