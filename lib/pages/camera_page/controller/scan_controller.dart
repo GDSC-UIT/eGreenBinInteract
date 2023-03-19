@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -5,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:egreenbin_interact/data/trashData.dart';
 import 'package:egreenbin_interact/models/Gabage.dart';
 import 'package:egreenbin_interact/util/app_colors.dart';
+import 'package:egreenbin_interact/util/app_string.dart';
 import 'package:egreenbin_interact/util/http_Service.dart';
 import 'package:egreenbin_interact/widgets/pop_Incorrect.dart';
 import 'package:egreenbin_interact/widgets/popup_Correct.dart';
@@ -225,8 +227,14 @@ class ScanController extends GetxController {
       print("have face");
 
       if (isTakeImage) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          capture();
+        Future.delayed(const Duration(milliseconds: 500), () async {
+          await capture();
+          String reqBody = jsonEncode({
+            "img_file": imageTake.value,
+          });
+          String name = await HttpService.postRequest(
+              url: AppString.URLAiRecognition, body: reqBody);
+          print("name of chid: $name");
           isTakeImage = false;
           isGotFace.value = true;
         });
