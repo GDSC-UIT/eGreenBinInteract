@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       initialBinding: GlobalBindings(),
       debugShowCheckedModeBanner: false,
       title: "Camera Application",
-      home: WaitingPage(),
+      home: ConnectPage(),
     );
   }
 }

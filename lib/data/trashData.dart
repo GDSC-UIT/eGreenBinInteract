@@ -1,8 +1,20 @@
 Map<String, dynamic> Data = {
-  "papper": {
-    "isRecycle": true,
+  "glass": {
+    "isRecycle": false,
   },
   "cardboard": {
+    "isRecycle": true,
+  },
+  "metal": {
     "isRecycle": false,
+  },
+  "paper": {
+    "isRecycle": true,
+  },
+  "plastic": {
+    "isRecycle": false,
+  },
+  "plastic-bags": {
+    "isRecycle": true,
   },
 };

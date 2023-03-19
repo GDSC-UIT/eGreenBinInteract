@@ -101,56 +101,22 @@ class _CameraScreenState extends State<CameraScreen> {
                                 children: [
                                   Column(
                                     children: [
-                                      Obx(
-                                        () => AppButton(
-                                          onPressed: () async {
-                                            controller.trashLabel.value == ""
-                                                ? () {}
-                                                : controller
-                                                    .handleAction("recycle");
-                                          },
-                                          color:
-                                              controller.trashLabel.value != ""
-                                                  ? AppColors.subPrimary
-                                                  : AppColors.subPrimaryDisable,
-                                          image: Assets.recycleImg,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 12,
-                                      ),
-                                      Text(
-                                        "RECYCLE",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                          color: AppColors.subPrimary,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Obx(
-                                        () => AppButton(
-                                          onPressed: () async {
-                                            controller.trashLabel.value == ""
-                                                ? () {
-                                                    print("here");
-                                                    controller.trashLabel
-                                                        .value = "cardboard";
-                                                    print(controller
-                                                        .trashLabel.value);
-                                                  }
-                                                : controller
-                                                    .handleAction("inrecycle");
-                                          },
-                                          color:
-                                              controller.trashLabel.value != ""
-                                                  ? AppColors.orange
-                                                  : AppColors.orangeDisable,
-                                          image: Assets.recycleImg,
-                                        ),
+                                      AppButton(
+                                        onPressed: () async {
+                                          // controller.trashLabel.value == ""
+                                          //     ? () {
+                                          //         print("here");
+                                          //         controller.trashLabel
+                                          //             .value = "cardboard";
+                                          //         print(controller
+                                          //             .trashLabel.value);
+                                          //       }
+                                          //     : controller
+                                          //         .handleAction("inrecycle");
+                                          controller.handleAction("inrecycle");
+                                        },
+                                        color: AppColors.orange,
+                                        image: Assets.recycleImg,
                                       ),
                                       const SizedBox(
                                         height: 12,
@@ -161,6 +127,32 @@ class _CameraScreenState extends State<CameraScreen> {
                                           fontSize: 20,
                                           fontWeight: FontWeight.w700,
                                           color: AppColors.orange,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      AppButton(
+                                        onPressed: () async {
+                                          // controller.trashLabel.value == ""
+                                          //     ? () {}
+                                          //     : controller
+                                          //         .handleAction("recycle");
+                                          controller.handleAction("recycle");
+                                        },
+                                        color: AppColors.subPrimary,
+                                        image: Assets.recycleImg,
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      Text(
+                                        "RECYCLE",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.subPrimary,
                                         ),
                                       )
                                     ],
