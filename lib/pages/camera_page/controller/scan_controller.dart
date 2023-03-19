@@ -129,7 +129,8 @@ class ScanController extends GetxController {
         channel?.sink.add("left");
       }
 
-      var response = await HttpService.postRequest(body: data.toJson());
+      var response = await HttpService.postRequest(
+          url: AppString.URLServer, body: data.toJson());
       showEffect(data.isRight);
       print("response: $response");
     } catch (e) {
