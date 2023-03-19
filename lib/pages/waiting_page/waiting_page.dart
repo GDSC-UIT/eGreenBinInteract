@@ -1,12 +1,15 @@
+import 'package:egreenbin_interact/pages/camera_page/camera_page.dart';
+import 'package:egreenbin_interact/pages/camera_page/controller/scan_controller.dart';
 import 'package:egreenbin_interact/util/app_colors.dart';
 import 'package:egreenbin_interact/util/image_asset.dart';
 import 'package:egreenbin_interact/widgets/app_button.dart';
 import 'package:egreenbin_interact/widgets/header.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class WaitingPage extends StatelessWidget {
+  final ScanController controller = Get.put(ScanController());
   WaitingPage({super.key});
-  TextEditingController textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -74,6 +77,12 @@ class WaitingPage extends StatelessWidget {
                             Assets.waitingTrash,
                             height: 200,
                           ),
+                          TextButton(
+                              onPressed: () {
+                                controller.isTakeImage = true;
+                                Get.to(CameraScreen());
+                              },
+                              child: Text("clcick"))
                         ],
                       ),
                     ),
