@@ -1,3 +1,4 @@
+import 'package:egreenbin_interact/util/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
@@ -39,7 +40,12 @@ class AppButton extends StatelessWidget {
         ),
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          child: text == null ? Image.asset(image!) : Text(text!),
+          child: text == null
+              ? Image.asset(image!)
+              : Text(
+                  text!,
+                  style: const TextStyle(color: Colors.white),
+                ),
         ),
       ),
     );

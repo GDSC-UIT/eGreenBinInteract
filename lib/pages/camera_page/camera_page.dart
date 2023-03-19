@@ -92,7 +92,7 @@ class CameraScreen extends GetView<ScanController> {
                                     // visible: controller.trashLabel.value != "",
                                     child: AppButton(
                                       onPressed: () async {
-                                        //controller.handleAction("recycle");
+                                        controller.handleAction("recycle");
                                       },
                                       color: AppColors.subPrimary,
                                       image: Assets.recycleImg,
@@ -117,7 +117,7 @@ class CameraScreen extends GetView<ScanController> {
                                     //visible: controller.trashLabel.value != "",
                                     child: AppButton(
                                       onPressed: () async {
-                                        //controller.handleAction("inrecycle");
+                                        controller.handleAction("inrecycle");
                                       },
                                       color: AppColors.orange,
                                       image: Assets.nonrecycleImg,

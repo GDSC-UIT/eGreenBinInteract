@@ -1,54 +1,91 @@
 import 'package:egreenbin_interact/util/app_colors.dart';
 import 'package:egreenbin_interact/util/image_asset.dart';
+import 'package:egreenbin_interact/widgets/app_button.dart';
+import 'package:egreenbin_interact/widgets/header.dart';
 import 'package:flutter/material.dart';
 
-class WaitinPage extends StatelessWidget {
-  const WaitinPage({super.key});
-
+class WaitingPage extends StatelessWidget {
+  WaitingPage({super.key});
+  TextEditingController textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            Image.asset(Assets.binImg),
-            Text(
-              "TOGETHER",
-              style: TextStyle(
-                color: AppColors.subPrimary,
-                fontSize: 25,
-                fontFamily: "GloriaHallelujah",
-                fontWeight: FontWeight.w400,
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Assets.bgImg),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Container(
+            height: height - 100,
+            margin: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(32),
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 12,
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    const Header(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 100,
+                          ),
+                          Text(
+                            "PLEASE THROW TRASH INTO THE RECYCLE BIN",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: AppColors.brown,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Image.asset(
+                            Assets.waitingArrow,
+                            height: 150,
+                          ),
+                          Image.asset(
+                            Assets.waitingTrash,
+                            height: 200,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Image.asset(Assets.binImg),
+                ),
+              ],
             ),
-            Text(
-              "SAVE OUR PLANET",
-              style: TextStyle(
-                color: AppColors.primary,
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Expanded(
-              child: Image.asset(Assets.earthImg),
-            ),
-            Text(
-              "eGreenBin",
-              style: TextStyle(
-                color: AppColors.subPrimary,
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Image.asset(Assets.footerImg),
-          ],
+          ),
         ),
       ),
     );

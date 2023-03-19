@@ -1,54 +1,48 @@
-import 'package:egreenbin_interact/pages/camera_page/camera_page.dart';
-import 'package:egreenbin_interact/pages/camera_page/controller/scan_controller.dart';
 import 'package:egreenbin_interact/util/app_colors.dart';
 import 'package:egreenbin_interact/util/image_asset.dart';
 import 'package:egreenbin_interact/widgets/app_button.dart';
 import 'package:egreenbin_interact/widgets/header.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:get/get.dart';
 
-class ConnectPage extends GetView<ScanController> {
+class ConnectPage extends StatelessWidget {
   ConnectPage({super.key});
   TextEditingController textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return GetX<ScanController>(
-      builder: (controller) {
-        if (!controller.isInitialized) {
-          return Container();
-        }
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Assets.bgImg),
-                  fit: BoxFit.cover,
-                ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Assets.bgImg),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Container(
+            height: height - 100,
+            margin: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(32),
               ),
-              child: Container(
-                height: height - 50,
-                margin: const EdgeInsets.symmetric(
-                    vertical: 32.0, horizontal: 20.0),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(32),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
                 ),
-                child: Column(
+              ],
+            ),
+            child: Stack(
+              children: [
+                Column(
                   children: [
                     const Header(),
                     Padding(
@@ -73,23 +67,34 @@ class ConnectPage extends GetView<ScanController> {
                           ),
                           TextField(
                             controller: textController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 15.0, horizontal: 20.0),
+                            ),
                           ),
                           const SizedBox(
                             height: 50,
                           ),
                           AppButton(
                             onPressed: () {
-                              try {
-                                controller.connectEsp(textController.text);
-                                Get.off(CameraScreen());
-                              } on FormatException catch (_, e) {
-                                Get.snackbar(
-                                  "cannot connect try again",
-                                  "$e",
-                                  colorText: AppColors.red,
-                                  backgroundColor: AppColors.lightGrey,
-                                );
-                              }
+                              // try {
+                              //   controll.connectEsp(textController.text);
+                              //   Get.off(CameraScreen());
+                              // } on FormatException catch (_, e) {
+                              //   Get.snackbar(
+                              //     "cannot connect try again",
+                              //     "$e",
+                              //     colorText: AppColors.red,
+                              //     backgroundColor: AppColors.lightGrey,
+                              //   );
+                              // }
                             },
                             color: AppColors.subPrimary,
                             text: "Connect",
@@ -97,17 +102,17 @@ class ConnectPage extends GetView<ScanController> {
                         ],
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Image.asset(Assets.binImg),
-                    ),
                   ],
                 ),
-              ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Image.asset(Assets.binImg),
+                ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

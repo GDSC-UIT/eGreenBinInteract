@@ -107,33 +107,38 @@ class ScanController extends GetxController {
 
     //check action
     if (choice == "recycle") {
-      if (Data[trashLabel]["isRecycle"]) {
-        data.isRight = true;
-      }
+      // if (Data[trashLabel]["isRecycle"]) {
+      //   data.isRight = true;
+      // }
+      print("right");
+      channel?.sink.add("right");
     } else {
-      if (!Data[trashLabel]["isRecycle"]) {
-        data.isRight = true;
-      }
+      // if (!Data[trashLabel]["isRecycle"]) {
+      //   data.isRight = true;
+      // }
+      print("left");
+
+      channel?.sink.add("left");
     }
 
-    try {
-      if (data.isRight) {
-        channel?.sink.add("right");
-      } else {
-        channel?.sink.add("left");
-      }
+    // try {
+    //   if (data.isRight) {
+    //     channel?.sink.add("right");
+    //   } else {
+    //     channel?.sink.add("left");
+    //   }
 
-      var response = await HttpService.postRequest(body: data.toJson());
-      showEffect(data.isRight);
-      print("response: $response");
-    } catch (e) {
-      Get.snackbar(
-        "error occur",
-        "$e",
-        colorText: AppColors.red,
-        backgroundColor: AppColors.lightGrey,
-      );
-    }
+    //   var response = await HttpService.postRequest(body: data.toJson());
+    //   showEffect(data.isRight);
+    //   print("response: $response");
+    // } catch (e) {
+    //   Get.snackbar(
+    //     "error occur",
+    //     "$e",
+    //     colorText: AppColors.red,
+    //     backgroundColor: AppColors.lightGrey,
+    //   );
+    // }
   }
 
   void showEffect(isRight) async {
