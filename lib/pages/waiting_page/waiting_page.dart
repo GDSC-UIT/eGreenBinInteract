@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class WaitingPage extends StatelessWidget {
-  final ScanController controller = Get.put(ScanController());
+  final ScanController controller = Get.find();
   WaitingPage({super.key});
   @override
   Widget build(BuildContext context) {

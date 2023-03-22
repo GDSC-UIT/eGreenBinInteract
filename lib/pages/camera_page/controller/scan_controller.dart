@@ -42,7 +42,7 @@ class ScanController extends GetxController {
   int count = 1;
   RxString trashLabel = "".obs;
   AudioPlayer audioPlayer = AudioPlayer();
-  IOWebSocketChannel? channel;
+  late IOWebSocketChannel channel;
 
   @override
   void onInit() {
@@ -64,7 +64,7 @@ class ScanController extends GetxController {
 
       print("url:$espUrl");
 
-      final channel = IOWebSocketChannel.connect(espUrl);
+      channel = IOWebSocketChannel.connect(espUrl);
       print("channel:$channel");
       channel.stream.listen(
         (message) {
@@ -101,6 +101,7 @@ class ScanController extends GetxController {
   }
 
   void handleAction(choice) async {
+    log("trash label ${trashLabel.value}");
     Garbage data = Garbage(
       code: "20521111",
       name: "Huu Hieu",
@@ -124,9 +125,17 @@ class ScanController extends GetxController {
 
     try {
       if (data.isRight) {
-        channel?.sink.add("right");
+        if (choice == "recycle") {
+          channel.sink.add("right");
+        } else {
+          channel.sink.add("left");
+        }
       } else {
-        channel?.sink.add("left");
+        if (choice == "recycle") {
+          channel.sink.add("left");
+        } else {
+          channel.sink.add("right");
+        }
       }
 
       var response = await HttpService.postRequest(
