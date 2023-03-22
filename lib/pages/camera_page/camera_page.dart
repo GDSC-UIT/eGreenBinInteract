@@ -145,10 +145,12 @@ class CameraScreen extends GetView<ScanController> {
                       alignment: Alignment.bottomRight,
                       child: Image.asset(Assets.binImg),
                     ),
-                    // TextButton(
-                    //   onPressed: controller.resetImage,
-                    //   child: const Text("reset image"),
-                    // ),
+                    TextButton(
+                      onPressed: () {
+                        controller.isTakeImage = !controller.isTakeImage;
+                      },
+                      child: const Text("get trash"),
+                    ),
                     // controller.imageTake.value != ""
                     //     ? Image.file(controller.imageTake.value)
                     //     : Container(),

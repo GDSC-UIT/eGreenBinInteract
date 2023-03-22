@@ -176,43 +176,45 @@ class ScanController extends GetxController {
 
   Future _processCameraImage(CameraImage image) async {
     _cameraImage = image;
-    final WriteBuffer allBytes = WriteBuffer();
-    for (final Plane plane in image.planes) {
-      allBytes.putUint8List(plane.bytes);
+    if (isTakeImage) {
+      final WriteBuffer allBytes = WriteBuffer();
+      for (final Plane plane in image.planes) {
+        allBytes.putUint8List(plane.bytes);
+      }
+      final bytes = allBytes.done().buffer.asUint8List();
+      final Size imageSize = Size(
+        image.width.toDouble(),
+        image.height.toDouble(),
+      );
+      final camera = _cameras[1];
+      final imageRotation =
+          InputImageRotationValue.fromRawValue(camera.sensorOrientation) ??
+              InputImageRotation.rotation0deg;
+      final inputImageFormat =
+          InputImageFormatValue.fromRawValue(image.format.raw) ??
+              InputImageFormat.nv21;
+
+      final planeData = image.planes.map((final Plane plane) {
+        return InputImagePlaneMetadata(
+            bytesPerRow: plane.bytesPerRow,
+            height: plane.height,
+            width: plane.width);
+      }).toList();
+
+      final inputImageData = InputImageData(
+        size: imageSize,
+        imageRotation: imageRotation,
+        inputImageFormat: inputImageFormat,
+        planeData: planeData,
+      );
+
+      final inputImage = InputImage.fromBytes(
+        bytes: bytes,
+        inputImageData: inputImageData,
+      );
+
+      detectFace(inputImage);
     }
-    final bytes = allBytes.done().buffer.asUint8List();
-    final Size imageSize = Size(
-      image.width.toDouble(),
-      image.height.toDouble(),
-    );
-    final camera = _cameras[1];
-    final imageRotation =
-        InputImageRotationValue.fromRawValue(camera.sensorOrientation) ??
-            InputImageRotation.rotation0deg;
-    final inputImageFormat =
-        InputImageFormatValue.fromRawValue(image.format.raw) ??
-            InputImageFormat.nv21;
-
-    final planeData = image.planes.map((final Plane plane) {
-      return InputImagePlaneMetadata(
-          bytesPerRow: plane.bytesPerRow,
-          height: plane.height,
-          width: plane.width);
-    }).toList();
-
-    final inputImageData = InputImageData(
-      size: imageSize,
-      imageRotation: imageRotation,
-      inputImageFormat: inputImageFormat,
-      planeData: planeData,
-    );
-
-    final inputImage = InputImage.fromBytes(
-      bytes: bytes,
-      inputImageData: inputImageData,
-    );
-
-    detectFace(inputImage);
   }
 
   Future<void> detectFace(final InputImage inputImage) async {
@@ -225,25 +227,23 @@ class ScanController extends GetxController {
         inputImage.inputImageData?.imageRotation != null &&
         faces.isNotEmpty) {
       print("have face");
+      print("take image");
+      Future.delayed(const Duration(milliseconds: 500), () async {
+        await capture();
+        isTakeImage = false;
+        isGotFace.value = true;
 
-      if (!isTakeImage) {
-        print("take image");
-        Future.delayed(const Duration(milliseconds: 500), () async {
-          await capture();
-          isTakeImage = true;
-          isGotFace.value = true;
+        // try {
+        //   print("path image: ${imageTake.value.path}");
+        //   await HttpService.postFile(
+        //       AppString.URLAiRecognition, imageTake.value.path);
 
-          try {
-            await HttpService.postFile(
-                AppString.URLAiRecognition, imageTake.value.path);
+        //   // print("name of chid: $name");
 
-            // print("name of chid: $name");
-
-          } catch (e) {
-            print("error: $e");
-          }
-        });
-      }
+        // } catch (e) {
+        //   print("error: $e");
+        // }
+      });
     }
     _isBusy = false;
   }
