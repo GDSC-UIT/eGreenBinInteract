@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,9 +18,9 @@ class HttpService {
     try {
       var uri = Uri.parse(url);
       var request = http.MultipartRequest("POST", uri);
-      request.files.add(await http.MultipartFile.fromPath(
+      request.files.add(http.MultipartFile.fromBytes(
         'img_file', // NOTE - this value must match the 'file=' at the start of -F
-        filePath,
+        File(filePath).readAsBytesSync(),
         contentType: MediaType(
           'image',
           'png',
