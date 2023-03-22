@@ -26,6 +26,13 @@ class HttpService {
         ),
       ));
       final response = await http.Response.fromStream(await request.send());
+      if (response.statusCode == 200) {
+        var decoded = json.decode(response.body);
+        print("data $decoded");
+        return decoded;
+      } else {
+        return "failed to post image";
+      }
     } catch (e) {
       print("error $e");
     }

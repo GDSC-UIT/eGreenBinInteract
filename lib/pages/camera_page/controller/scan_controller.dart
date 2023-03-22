@@ -228,21 +228,20 @@ class ScanController extends GetxController {
         faces.isNotEmpty) {
       print("have face");
       print("take image");
-      Future.delayed(const Duration(milliseconds: 500), () async {
+      Future.delayed(const Duration(milliseconds: 200), () async {
         await capture();
         isTakeImage = false;
         isGotFace.value = true;
 
-        // try {
-        //   print("path image: ${imageTake.value.path}");
-        //   await HttpService.postFile(
-        //       AppString.URLAiRecognition, imageTake.value.path);
+        try {
+          print("path image: ${imageTake.value.path}");
+          var response = await HttpService.postFile(
+              AppString.URLAiRecognition, imageTake.value.path);
 
-        //   // print("name of chid: $name");
-
-        // } catch (e) {
-        //   print("error: $e");
-        // }
+          print("name of chid: ${response}");
+        } catch (e) {
+          print("error: $e");
+        }
       });
     }
     _isBusy = false;
