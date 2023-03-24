@@ -40,7 +40,7 @@ class ScanController extends GetxController {
   bool _canProcess = true;
   bool _isBusy = false;
   int count = 1;
-  RxString trashLabel = "".obs;
+  RxString trashLabel = "plastic".obs;
   AudioPlayer audioPlayer = AudioPlayer();
   late IOWebSocketChannel channel;
 
@@ -61,11 +61,8 @@ class ScanController extends GetxController {
   void connectEsp(String espUrlInput) {
     try {
       espUrl = "ws://$espUrlInput:81";
-
       print("url:$espUrl");
-
       channel = IOWebSocketChannel.connect(espUrl);
-      print("channel:$channel");
       channel.stream.listen(
         (message) {
           print('Received from MCU: $message');
@@ -86,17 +83,9 @@ class ScanController extends GetxController {
               trashLabel.value = signal;
           }
         },
-        onDone: () {
-          //if WebSocket is disconnected
-          print("Web socket is closed");
-        },
-        onError: (error) {
-          print(error.toString());
-          throw const FormatException("Input not correct");
-        },
       );
-    } catch (e) {
-      print("$e");
+    } on SocketException catch (socketException) {
+      print("Caught SocketException ff: $socketException");
     }
   }
 
@@ -141,6 +130,9 @@ class ScanController extends GetxController {
       var response = await HttpService.postRequest(
           url: AppString.URLServer, body: data.toJson());
       showEffect(data.isRight);
+      resetImage();
+      Get.back();
+
       print("response: $response");
     } catch (e) {
       Get.snackbar(
@@ -160,6 +152,9 @@ class ScanController extends GetxController {
       await audioPlayer.play(AssetSource('audios/correct.mp3'));
       Get.dialog(const PopupCorrect());
     }
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      Get.back();
+    });
   }
 
   Future<void> initCamera() async {
@@ -242,15 +237,15 @@ class ScanController extends GetxController {
         isTakeImage = false;
         isGotFace.value = true;
 
-        try {
-          print("path image: ${imageTake.value.path}");
-          var response = await HttpService.postFile(
-              AppString.URLAiRecognition, imageTake.value.path);
+        // try {
+        //   print("path image: ${imageTake.value.path}");
+        //   var response = await HttpService.postFile(
+        //       AppString.URLAiRecognition, imageTake.value.path);
 
-          print("name of chid: ${response}");
-        } catch (e) {
-          print("error: $e");
-        }
+        //   print("name of chid: ${response}");
+        // } catch (e) {
+        //   print("error: $e");
+        // }
       });
     }
     _isBusy = false;
@@ -285,7 +280,7 @@ class ScanController extends GetxController {
     imageTake.value = File("");
     isTakeImage = false;
     isGotFace.value = false;
-    trashLabel.value = "";
+    //trashLabel.value = "";
   }
 
   Future<void> capture() async {

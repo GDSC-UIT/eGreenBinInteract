@@ -12,9 +12,9 @@ Map<String, dynamic> Data = {
     "isRecycle": true,
   },
   "plastic": {
-    "isRecycle": false,
+    "isRecycle": true,
   },
   "plastic-bags": {
-    "isRecycle": true,
+    "isRecycle": false,
   },
 };

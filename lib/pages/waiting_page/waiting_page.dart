@@ -82,7 +82,7 @@ class WaitingPage extends StatelessWidget {
                                 controller.isTakeImage = true;
                                 Get.to(CameraScreen());
                               },
-                              child: Text("clcick"))
+                              child: Text("click"))
                         ],
                       ),
                     ),
