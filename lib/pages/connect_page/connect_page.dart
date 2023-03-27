@@ -92,8 +92,9 @@ class ConnectPage extends StatelessWidget {
                             onPressed: () {
                               try {
                                 controller.connectEsp(textController.text);
-                                Get.off(CameraScreen());
+                                Get.off(WaitingPage());
                               } on FormatException catch (_, e) {
+                                print("here adfknfa");
                                 Get.snackbar(
                                   "cannot connect try again",
                                   "$e",

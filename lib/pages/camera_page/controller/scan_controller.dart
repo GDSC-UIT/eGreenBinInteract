@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
 import 'package:egreenbin_interact/data/trashData.dart';
 import 'package:egreenbin_interact/models/Gabage.dart';
+import 'package:egreenbin_interact/pages/camera_page/camera_page.dart';
 import 'package:egreenbin_interact/util/app_colors.dart';
 import 'package:egreenbin_interact/util/app_string.dart';
 import 'package:egreenbin_interact/util/http_Service.dart';
@@ -61,11 +62,8 @@ class ScanController extends GetxController {
   void connectEsp(String espUrlInput) {
     try {
       espUrl = "ws://$espUrlInput:81";
-
       print("url:$espUrl");
-
       channel = IOWebSocketChannel.connect(espUrl);
-      print("channel:$channel");
       channel.stream.listen(
         (message) {
           print('Received from MCU: $message');
@@ -78,6 +76,7 @@ class ScanController extends GetxController {
             case "capture":
               {
                 isTakeImage = true;
+                Get.to(CameraScreen());
                 break;
               }
             default:
@@ -86,17 +85,9 @@ class ScanController extends GetxController {
               trashLabel.value = signal;
           }
         },
-        onDone: () {
-          //if WebSocket is disconnected
-          print("Web socket is closed");
-        },
-        onError: (error) {
-          print(error.toString());
-          throw const FormatException("Input not correct");
-        },
       );
-    } catch (e) {
-      print("$e");
+    } on SocketException catch (socketException) {
+      print("Caught SocketException ff: $socketException");
     }
   }
 
@@ -111,12 +102,14 @@ class ScanController extends GetxController {
     if (choice == "recycle") {
       if (Data[trashLabel]["isRecycle"]) {
         data.isRight = true;
+        print("1");
       }
       // print("right");
       // channel?.sink.add("right");
     } else {
       if (!Data[trashLabel]["isRecycle"]) {
         data.isRight = true;
+        print("2");
       }
       // print("left");
 
@@ -127,20 +120,27 @@ class ScanController extends GetxController {
       if (data.isRight) {
         if (choice == "recycle") {
           channel.sink.add("right");
+          print("here 1");
         } else {
           channel.sink.add("left");
+          print("here 2");
         }
       } else {
         if (choice == "recycle") {
           channel.sink.add("left");
+          print("here 3");
         } else {
           channel.sink.add("right");
+          print("here 4");
         }
       }
 
       var response = await HttpService.postRequest(
           url: AppString.URLServer, body: data.toJson());
       showEffect(data.isRight);
+      resetImage();
+      Get.back();
+
       print("response: $response");
     } catch (e) {
       Get.snackbar(
@@ -160,6 +160,9 @@ class ScanController extends GetxController {
       await audioPlayer.play(AssetSource('audios/correct.mp3'));
       Get.dialog(const PopupCorrect());
     }
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      Get.back();
+    });
   }
 
   Future<void> initCamera() async {
@@ -242,15 +245,15 @@ class ScanController extends GetxController {
         isTakeImage = false;
         isGotFace.value = true;
 
-        try {
-          print("path image: ${imageTake.value.path}");
-          var response = await HttpService.postFile(
-              AppString.URLAiRecognition, imageTake.value.path);
+        // try {
+        //   print("path image: ${imageTake.value.path}");
+        //   var response = await HttpService.postFile(
+        //       AppString.URLAiRecognition, imageTake.value.path);
 
-          print("name of chid: ${response}");
-        } catch (e) {
-          print("error: $e");
-        }
+        //   print("name of chid: ${response}");
+        // } catch (e) {
+        //   print("error: $e");
+        // }
       });
     }
     _isBusy = false;
