@@ -104,19 +104,19 @@ class _CameraScreenState extends State<CameraScreen> {
                                     children: [
                                       AppButton(
                                         onPressed: () async {
-                                          // controller.trashLabel.value == ""
-                                          //     ? () {
-                                          //         print("here");
-                                          //         controller.trashLabel
-                                          //             .value = "cardboard";
-                                          //         print(controller
-                                          //             .trashLabel.value);
-                                          //       }
-                                          //     : controller
-                                          //         .handleAction("inrecycle");
-                                          controller.handleAction("inrecycle");
+                                          print("click");
+                                          controller.trashLabel.value == ""
+                                              ? () {
+                                                  print(
+                                                      "dont have trash label");
+                                                }
+                                              : controller
+                                                  .handleAction("inrecycle");
+                                          // controller.handleAction("inrecycle");
                                         },
-                                        color: AppColors.orange,
+                                        color: controller.trashLabel.value != ""
+                                            ? AppColors.orange
+                                            : AppColors.orangeDisable,
                                         image: Assets.recycleImg,
                                       ),
                                       const SizedBox(
@@ -136,13 +136,17 @@ class _CameraScreenState extends State<CameraScreen> {
                                     children: [
                                       AppButton(
                                         onPressed: () async {
-                                          // controller.trashLabel.value == ""
-                                          //     ? () {}
-                                          //     : controller
-                                          //         .handleAction("recycle");
-                                          controller.handleAction("recycle");
+                                          controller.trashLabel.value == ""
+                                              ? () {
+                                                  print("dont have label");
+                                                }
+                                              : controller
+                                                  .handleAction("recycle");
+                                          // controller.handleAction("recycle");
                                         },
-                                        color: AppColors.subPrimary,
+                                        color: controller.trashLabel.value != ""
+                                            ? AppColors.subPrimary
+                                            : AppColors.subPrimaryDisable,
                                         image: Assets.recycleImg,
                                       ),
                                       const SizedBox(
@@ -169,7 +173,7 @@ class _CameraScreenState extends State<CameraScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            controller.isTakeImage = !controller.isTakeImage;
+                            controller.trashLabel.value = "cardboard";
                           },
                           child: const Text("got trash"),
                         ),

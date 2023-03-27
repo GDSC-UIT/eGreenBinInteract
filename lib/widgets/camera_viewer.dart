@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:egreenbin_interact/pages/camera_page/controller/scan_controller.dart';
 import 'package:egreenbin_interact/util/app_colors.dart';
+import 'package:egreenbin_interact/util/image_asset.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,6 +36,15 @@ class CameraViewer extends GetView<ScanController> {
                 ),
               ),
             ),
+            !controller.isGotFace.value
+                ? Image.asset(
+                    Assets.faceScan,
+                    height: 200,
+                  )
+                : Image.asset(
+                    Assets.faceSuccess,
+                    height: 150,
+                  )
           ],
         );
       },
