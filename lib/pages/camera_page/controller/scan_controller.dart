@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
 import 'package:egreenbin_interact/data/trashData.dart';
 import 'package:egreenbin_interact/models/Gabage.dart';
+import 'package:egreenbin_interact/pages/camera_page/camera_page.dart';
 import 'package:egreenbin_interact/util/app_colors.dart';
 import 'package:egreenbin_interact/util/app_string.dart';
 import 'package:egreenbin_interact/util/http_Service.dart';
@@ -40,7 +41,7 @@ class ScanController extends GetxController {
   bool _canProcess = true;
   bool _isBusy = false;
   int count = 1;
-  RxString trashLabel = "plastic".obs;
+  RxString trashLabel = "".obs;
   AudioPlayer audioPlayer = AudioPlayer();
   late IOWebSocketChannel channel;
 
@@ -75,6 +76,7 @@ class ScanController extends GetxController {
             case "capture":
               {
                 isTakeImage = true;
+                Get.to(CameraScreen());
                 break;
               }
             default:
@@ -100,12 +102,14 @@ class ScanController extends GetxController {
     if (choice == "recycle") {
       if (Data[trashLabel]["isRecycle"]) {
         data.isRight = true;
+        print("1");
       }
       // print("right");
       // channel?.sink.add("right");
     } else {
       if (!Data[trashLabel]["isRecycle"]) {
         data.isRight = true;
+        print("2");
       }
       // print("left");
 
@@ -116,14 +120,18 @@ class ScanController extends GetxController {
       if (data.isRight) {
         if (choice == "recycle") {
           channel.sink.add("right");
+          print("here 1");
         } else {
           channel.sink.add("left");
+          print("here 2");
         }
       } else {
         if (choice == "recycle") {
           channel.sink.add("left");
+          print("here 3");
         } else {
           channel.sink.add("right");
+          print("here 4");
         }
       }
 
@@ -280,7 +288,7 @@ class ScanController extends GetxController {
     imageTake.value = File("");
     isTakeImage = false;
     isGotFace.value = false;
-    //trashLabel.value = "";
+    trashLabel.value = "";
   }
 
   Future<void> capture() async {

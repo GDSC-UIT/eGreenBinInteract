@@ -6,6 +6,7 @@ import 'package:egreenbin_interact/widgets/app_button.dart';
 import 'package:egreenbin_interact/widgets/camera_viewer.dart';
 import 'package:egreenbin_interact/widgets/got_faceLabel.dart';
 import 'package:egreenbin_interact/widgets/header.dart';
+import 'package:egreenbin_interact/widgets/loading.dart';
 import 'package:egreenbin_interact/widgets/non_faceLabel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -181,7 +182,7 @@ class _CameraScreenState extends State<CameraScreen> {
                 ),
               ),
             )
-          : Text("init CAM")),
+          : LoadingScreen()),
     );
   }
 }
