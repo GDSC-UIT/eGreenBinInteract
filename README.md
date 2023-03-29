@@ -1,10 +1,8 @@
-# eGreenBin markdown
 
 # eGreenBin interact
-
+<img align="right" width="300" alt="logo" src="assets/images_app/logo.png">
 This Flutter project is a face recognition app. It is designed to detect the face of a student and retrieve their name from a database. Students can interact with the IoT system through picking Recycled/Non-recycled for that piece of trash.
 
-![Screenshot 2023-03-29 191914.png](assets/images_app/logo.png)
 
 ## Getting Started
 
@@ -45,13 +43,14 @@ The app uses the following dependencies:
 - `web_socket_channel:` ^2.3.0
 - `flutter_launcher_icons:` "^0.11.0”
 
-## Screenshots
+## Demo
+<div align="center">
+  <img src="assets/images_app/complete_face1.png" alt="Screenshot 2" height="400"/>
+  <img src="assets/images_app/Reaction_wrong.png" alt="Screenshot 3" height="400"/>
+  <img src="assets/images_app/Reaction_true.png" alt="Screenshot 4" height="400"/>
+</div>
 
-![Screenshot 2023-03-29 191914.png](assets/images_app/complete_face.png)
 
-![Screenshot 2023-03-29 191914.png](assets/images_app/Reaction_true.png)
-
-![Screenshot 2023-03-29 191914.png](assets/images_app/Reaction_wrong.png)
 
 ## Future improvements
 
