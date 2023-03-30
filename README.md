@@ -44,7 +44,9 @@ The app uses the following dependencies:
 - `flutter_launcher_icons:` "^0.11.0”
 
 ## Demo
+
 <div align="center">
+  <img height="400" alt="logo" src="https://media.giphy.com/media/zd6LxU8fxogdFFWfK5/giphy.gif">
   <img src="assets/images_app/complete_face1.png" alt="Screenshot 2" height="400"/>
   <img src="assets/images_app/Reaction_wrong.png" alt="Screenshot 3" height="400"/>
   <img src="assets/images_app/Reaction_true.png" alt="Screenshot 4" height="400"/>
