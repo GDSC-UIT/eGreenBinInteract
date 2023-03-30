@@ -1,10 +1,8 @@
-# eGreenBin markdown
 
 # eGreenBin interact
-
+<img align="right" width="300" alt="logo" src="assets/images_app/logo.png">
 This Flutter project is a face recognition app. It is designed to detect the face of a student and retrieve their name from a database. Students can interact with the IoT system through picking Recycled/Non-recycled for that piece of trash.
 
-![Screenshot 2023-03-29 191914.png](assets/images_app/logo.png)
 
 ## Getting Started
 
@@ -17,7 +15,10 @@ To get started with this project, follow these steps:
 
 ## Using The App
 
-The app has a simple user interface that allows you to choose between two options - recycled or non-recycled. 
+The app has a simple user interface that allows you to use. 
+- First, when you open the app you will need to connect with Iot trash by entering the IP address shown on the screen of the trash bin. 
+- When connected successfully you will see the waiting screen.  
+- Whenever the sensor detects trash in the bin it will trigger the app to go the interact screen.
 
 ## Project Structure
 
@@ -45,15 +46,21 @@ The app uses the following dependencies:
 - `web_socket_channel:` ^2.3.0
 - `flutter_launcher_icons:` "^0.11.0”
 
-## Screenshots
+## Demo
 
-![Screenshot 2023-03-29 191914.png](assets/images_app/complete_face.png)
+<div align="center">
+  <img height="400" alt="logo" src="https://media.giphy.com/media/zd6LxU8fxogdFFWfK5/giphy.gif">
+  <img src="assets/images_app/complete_face1.png" alt="Screenshot 2" height="400"/>
+  <img src="assets/images_app/Reaction_wrong.png" alt="Screenshot 3" height="400"/>
+  <img src="assets/images_app/Reaction_true.png" alt="Screenshot 4" height="400"/>
+</div>
 
-![Screenshot 2023-03-29 191914.png](assets/images_app/Reaction_true.png)
 
-![Screenshot 2023-03-29 191914.png](assets/images_app/Reaction_wrong.png)
 
 ## Future improvements
 
 - Improve user experience better
 - Face processing speed will be faster
+
+## Contributor
+Nguyen Cong Tan Phat
