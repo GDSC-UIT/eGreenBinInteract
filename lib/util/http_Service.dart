@@ -27,6 +27,7 @@ class HttpService {
         ),
       ));
       final response = await http.Response.fromStream(await request.send());
+
       if (response.statusCode == 200) {
         var decoded = json.decode(response.body);
         print("data $decoded");

@@ -44,6 +44,7 @@ class ScanController extends GetxController {
   RxString trashLabel = "".obs;
   AudioPlayer audioPlayer = AudioPlayer();
   late IOWebSocketChannel channel;
+  Garbage? data;
 
   @override
   void onInit() {
@@ -93,62 +94,49 @@ class ScanController extends GetxController {
 
   void handleAction(choice) async {
     log("trash label ${trashLabel.value}");
-    Garbage data = Garbage(
-      code: "20521111",
-      name: "Huu Hieu",
-    );
 
-    //check action
-    if (choice == "recycle") {
-      if (Data[trashLabel]["isRecycle"]) {
-        data.isRight = true;
-        print("1");
-      }
-      // print("right");
-      // channel?.sink.add("right");
-    } else {
-      if (!Data[trashLabel]["isRecycle"]) {
-        data.isRight = true;
-        print("2");
-      }
-      // print("left");
-
-      // channel?.sink.add("left");
-    }
-
-    try {
-      if (data.isRight) {
-        if (choice == "recycle") {
-          channel.sink.add("right");
-          print("here 1");
-        } else {
-          channel.sink.add("left");
-          print("here 2");
+    if (data != null) {
+      //check action
+      if (choice == "recycle") {
+        if (Data[trashLabel]["isRecycle"]) {
+          data?.isRight = true;
         }
       } else {
-        if (choice == "recycle") {
-          channel.sink.add("left");
-          print("here 3");
-        } else {
-          channel.sink.add("right");
-          print("here 4");
+        if (!Data[trashLabel]["isRecycle"]) {
+          data?.isRight = true;
         }
       }
 
-      var response = await HttpService.postRequest(
-          url: AppString.URLServer, body: data.toJson());
-      showEffect(data.isRight);
-      resetImage();
-      Get.back();
+      try {
+        if (data!.isRight) {
+          if (choice == "recycle") {
+            channel.sink.add("right");
+          } else {
+            channel.sink.add("left");
+          }
+        } else {
+          if (choice == "recycle") {
+            channel.sink.add("left");
+          } else {
+            channel.sink.add("right");
+          }
+        }
 
-      print("response: $response");
-    } catch (e) {
-      Get.snackbar(
-        "error occur",
-        "$e",
-        colorText: AppColors.red,
-        backgroundColor: AppColors.lightGrey,
-      );
+        var response = await HttpService.postRequest(
+            url: AppString.URLServer, body: data!.toJson());
+        showEffect(data!.isRight);
+        resetImage();
+        Get.back();
+
+        print("response: $response");
+      } catch (e) {
+        Get.snackbar(
+          "error occur",
+          "$e",
+          colorText: AppColors.red,
+          backgroundColor: AppColors.lightGrey,
+        );
+      }
     }
   }
 
@@ -240,21 +228,26 @@ class ScanController extends GetxController {
         faces.isNotEmpty) {
       print("have face");
       print("take image");
-      Future.delayed(const Duration(milliseconds: 200), () async {
-        await capture();
-        isTakeImage = false;
-        isGotFace.value = true;
+      await Future.delayed(const Duration(milliseconds: 200));
 
-        // try {
-        //   print("path image: ${imageTake.value.path}");
-        //   var response = await HttpService.postFile(
-        //       AppString.URLAiRecognition, imageTake.value.path);
+      await capture();
+      isTakeImage = false;
+      isGotFace.value = true;
 
-        //   print("name of chid: ${response}");
-        // } catch (e) {
-        //   print("error: $e");
-        // }
-      });
+      try {
+        var response = await HttpService.postFile(
+            AppString.URLAiRecognition, imageTake.value.path);
+
+        String result = response['result'];
+        List<String> parts = result.split('-');
+        String id = parts[0];
+        String name = parts[1];
+        data = Garbage(code: id, name: name);
+
+        print("name of chid: ${response}");
+      } catch (e) {
+        print("error: $e");
+      }
     }
     _isBusy = false;
   }
@@ -289,6 +282,7 @@ class ScanController extends GetxController {
     isTakeImage = false;
     isGotFace.value = false;
     trashLabel.value = "";
+    data = null;
   }
 
   Future<void> capture() async {
