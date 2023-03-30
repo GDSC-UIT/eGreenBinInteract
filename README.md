@@ -15,7 +15,10 @@ To get started with this project, follow these steps:
 
 ## Using The App
 
-The app has a simple user interface that allows you to choose between two options - recycled or non-recycled. 
+The app has a simple user interface that allows you to use. 
+- First, when you open the app you will need to connect with Iot trash by entering the IP address shown on the screen of the trash bin. 
+- When connected successfully you will see the waiting screen.  
+- Whenever the sensor detects trash in the bin it will trigger the app to go the interact screen.
 
 ## Project Structure
 
@@ -58,3 +61,6 @@ The app uses the following dependencies:
 
 - Improve user experience better
 - Face processing speed will be faster
+
+## Contributor
+Nguyen Cong Tan Phat
