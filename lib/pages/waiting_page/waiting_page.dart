@@ -77,12 +77,6 @@ class WaitingPage extends StatelessWidget {
                             Assets.waitingTrash,
                             height: 200,
                           ),
-                          TextButton(
-                              onPressed: () {
-                                controller.isTakeImage = true;
-                                Get.to(CameraScreen());
-                              },
-                              child: Text("click"))
                         ],
                       ),
                     ),

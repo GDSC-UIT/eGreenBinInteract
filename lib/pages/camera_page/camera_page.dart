@@ -171,15 +171,6 @@ class _CameraScreenState extends State<CameraScreen> {
                           alignment: Alignment.bottomRight,
                           child: Image.asset(Assets.binImg),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            controller.trashLabel.value = "cardboard";
-                          },
-                          child: const Text("got trash"),
-                        ),
-                        // controller.imageTake.value != ""
-                        //     ? Image.file(controller.imageTake.value)
-                        //     : Container(),
                       ],
                     ),
                   ),
