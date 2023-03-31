@@ -104,7 +104,6 @@ class _CameraScreenState extends State<CameraScreen> {
                                     children: [
                                       AppButton(
                                         onPressed: () async {
-                                          print("click");
                                           controller.trashLabel.value == ""
                                               ? () {
                                                   print(
@@ -137,9 +136,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                       AppButton(
                                         onPressed: () async {
                                           controller.trashLabel.value == ""
-                                              ? () {
-                                                  print("dont have label");
-                                                }
+                                              ? () {}
                                               : controller
                                                   .handleAction("recycle");
                                           // controller.handleAction("recycle");

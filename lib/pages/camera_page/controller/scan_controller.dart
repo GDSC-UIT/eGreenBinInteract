@@ -127,8 +127,6 @@ class ScanController extends GetxController {
         showEffect(data!.isRight);
         resetImage();
         Get.back();
-
-        print("response: $response");
       } catch (e) {
         Get.snackbar(
           "error occur",
@@ -227,7 +225,7 @@ class ScanController extends GetxController {
         inputImage.inputImageData?.imageRotation != null &&
         faces.isNotEmpty) {
       print("have face");
-      print("take image");
+
       await Future.delayed(const Duration(milliseconds: 200));
 
       await capture();
@@ -243,8 +241,6 @@ class ScanController extends GetxController {
         String id = parts[0];
         String name = parts[1];
         data = Garbage(code: id, name: name);
-
-        print("name of chid: ${response}");
       } catch (e) {
         print("error: $e");
       }
