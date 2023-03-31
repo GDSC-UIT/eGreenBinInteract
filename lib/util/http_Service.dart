@@ -30,7 +30,7 @@ class HttpService {
 
       if (response.statusCode == 200) {
         var decoded = json.decode(response.body);
-        print("data $decoded");
+
         return decoded;
       } else {
         return "failed to post image";

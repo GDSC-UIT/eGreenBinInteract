@@ -94,7 +94,6 @@ class ConnectPage extends StatelessWidget {
                                 controller.connectEsp(textController.text);
                                 Get.off(WaitingPage());
                               } on FormatException catch (_, e) {
-                                print("here adfknfa");
                                 Get.snackbar(
                                   "cannot connect try again",
                                   "$e",
