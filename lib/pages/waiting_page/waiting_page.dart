@@ -16,77 +16,76 @@ class WaitingPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Assets.bgImg),
-              fit: BoxFit.cover,
-            ),
-          ),
+        child: SingleChildScrollView(
           child: Container(
-            height: height - 100,
-            margin: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-            ),
+            height: height,
             decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(32),
+              image: DecorationImage(
+                image: AssetImage(Assets.bgImg),
+                fit: BoxFit.cover,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3),
-                ),
-              ],
             ),
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    const Header(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                      ),
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 100,
-                          ),
-                          Text(
-                            "PLEASE THROW TRASH INTO THE RECYCLE BIN",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: AppColors.brown,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
+            child: Container(
+              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 80),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(32),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      const Header(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                        ),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 100,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Image.asset(
-                            Assets.waitingArrow,
-                            height: 150,
-                          ),
-                          Image.asset(
-                            Assets.waitingTrash,
-                            height: 200,
-                          ),
-                        ],
+                            Text(
+                              "PLEASE THROW TRASH INTO THE RECYCLE BIN",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: AppColors.brown,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 20,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Image.asset(
+                              Assets.waitingArrow,
+                              height: 150,
+                            ),
+                            Image.asset(
+                              Assets.waitingTrash,
+                              height: 200,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Image.asset(Assets.binImg),
-                ),
-              ],
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Image.asset(Assets.binImg),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
