@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp, // Chỉ cho phép hiển thị ở chế độ màn hình dọc
   ]);

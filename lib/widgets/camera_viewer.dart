@@ -37,13 +37,42 @@ class CameraViewer extends GetView<ScanController> {
               ),
             ),
             !controller.isGotFace.value
-                ? Image.asset(
-                    Assets.faceScan,
-                    height: 200,
-                  )
-                : Image.asset(
-                    Assets.faceSuccess,
-                    height: 150,
+                ? controller.isLoading.value
+                    ? const CircularProgressIndicator(
+                        strokeWidth: 6,
+                        color: Color(0xff99BF6F),
+                        backgroundColor: Colors.white,
+                      )
+                    : Image.asset(
+                        Assets.faceScan,
+                        height: 200,
+                      )
+                : Column(
+                    children: [
+                      Image.asset(
+                        Assets.faceSuccess,
+                        height: 150,
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      const Text(
+                        "Hello ",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        controller.studentName.value,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
                   )
           ],
         );
