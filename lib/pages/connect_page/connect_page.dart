@@ -89,7 +89,7 @@ class ConnectPage extends StatelessWidget {
                             AppButton(
                               onPressed: () {
                                 try {
-                                  //controller.connectEsp(textController.text);
+                                  controller.connectEsp(textController.text);
                                   Get.off(CameraScreen());
                                 } on FormatException catch (_, e) {
                                   Get.snackbar(

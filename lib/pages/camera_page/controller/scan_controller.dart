@@ -80,7 +80,6 @@ class ScanController extends GetxController {
             case "capture":
               {
                 isTakeImage = true;
-                Get.to(CameraScreen());
                 break;
               }
             default:
@@ -101,7 +100,6 @@ class ScanController extends GetxController {
         studentID: studentId,
         name: studentName.value,
         trashLabel: trashLabel.value);
-
     if (data != null) {
       //check action
       if (choice == "recycle") {
@@ -115,26 +113,20 @@ class ScanController extends GetxController {
       }
 
       try {
-        //tempary close controll iot
-        // if (data!.isRight) {
-        //   if (choice == "recycle") {
-        //     channel.sink.add("right");
-        //   } else {
-        //     channel.sink.add("left");
-        //   }
-        // } else {
-        //   if (choice == "recycle") {
-        //     channel.sink.add("left");
-        //   } else {
-        //     channel.sink.add("right");
-        //   }
-        // }
         print("call api");
         var response = await HttpService.postRequest(
             url: AppString.URLServer, body: data!.toJson());
         print("response choose type: $response");
         showEffect(data!.isRight);
+
         if (data!.isRight) {
+          //tempary close controll iot
+          if (choice == "recycle") {
+            channel.sink.add("right");
+          } else {
+            channel.sink.add("left");
+          }
+
           resetImage();
         }
       } catch (e) {
@@ -156,7 +148,7 @@ class ScanController extends GetxController {
       await audioPlayer.play(AssetSource('audios/correct.mp3'));
       Get.dialog(const PopupCorrect());
     }
-    await Future.delayed(const Duration(milliseconds: 3000), () {
+    Future.delayed(const Duration(milliseconds: 3000), () {
       Get.back();
     });
   }
@@ -237,16 +229,10 @@ class ScanController extends GetxController {
       print("have face");
 
       await Future.delayed(const Duration(milliseconds: 200));
-
       await capture();
 
       try {
         isLoading.value = true;
-        String studentInfo = await HttpService.uploadImage(
-            AppString.URLAiRecognition, imageTake.value);
-        List<String> parts = studentInfo.split("_");
-        studentId = parts[0];
-        studentName.value = parts[1];
         isLoading.value = false;
         isTakeImage = false;
         isGotFace.value = true;
