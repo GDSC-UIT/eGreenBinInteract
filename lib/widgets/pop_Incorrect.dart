@@ -43,7 +43,7 @@ class PopupInCorrect extends StatelessWidget {
           ),
           Image.asset(Assets.wrongImg),
           Text(
-            "YOU WRONG!",
+            "LET TRY AGAIN!",
             style: TextStyle(
               decoration: TextDecoration.none,
               color: AppColors.grey,

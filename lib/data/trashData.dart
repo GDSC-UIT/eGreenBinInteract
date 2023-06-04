@@ -6,7 +6,7 @@ Map<String, dynamic> Data = {
     "isRecycle": true,
   },
   "metal": {
-    "isRecycle": false,
+    "isRecycle": true,
   },
   "paper": {
     "isRecycle": true,
@@ -14,7 +14,7 @@ Map<String, dynamic> Data = {
   "plastic": {
     "isRecycle": true,
   },
-  "plastic-bags": {
+  "plastic_bag": {
     "isRecycle": false,
   },
 };

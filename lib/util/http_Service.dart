@@ -14,56 +14,57 @@ class HttpService {
     }
   }
 
-  static Future<dynamic> postFile(String url, String filePath) async {
-    try {
-      var uri = Uri.parse(url);
-      var request = http.MultipartRequest("POST", uri);
-      request.files.add(http.MultipartFile.fromBytes(
-        'img_file', // NOTE - this value must match the 'file=' at the start of -F
-        File(filePath).readAsBytesSync(),
-        contentType: MediaType(
-          'image',
-          'png',
-        ),
-      ));
-      final response = await http.Response.fromStream(await request.send());
+  static Future<String> uploadImage(String url, File imageFile) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    // Thêm file ảnh vào yêu cầu đa phần
+    var imageStream = http.ByteStream(imageFile.openRead());
+    var length = await imageFile.length();
+    var multipartFile = http.MultipartFile('img_file', imageStream, length,
+        filename: imageFile.path);
 
-      if (response.statusCode == 200) {
-        var decoded = json.decode(response.body);
+    request.files.add(multipartFile);
 
-        return decoded;
-      } else {
-        return "failed to post image";
-      }
-    } catch (e) {
-      print("error $e");
+    // Gửi yêu cầu và xử lý phản hồi
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      var responseString = await response.stream.bytesToString();
+      var jsonResponse = json.decode(responseString);
+
+      print(
+          'Upload thành công! Phản hồi: ${jsonResponse["predict_user_name"][0]}');
+      return jsonResponse["predict_user_name"][0];
+    } else {
+      print(
+          'Upload thất bại. Mã lỗi: ${await response.stream.bytesToString()}');
+      return "unknown";
     }
   }
 
   // static Future<dynamic> postFile(String url, String filePath) async {
-  //   final urlReq = Uri.parse(url);
-  //   var request = http.MultipartRequest('POST', urlReq);
-  //   // Attach the file in the request
-  //   var file = await http.MultipartFile.fromPath('img_file', filePath);
-  //   request.files.add(file);
+  //   try {
+  //     var uri = Uri.parse(url);
+  //     var request = http.MultipartRequest("POST", uri);
+  //     request.files.add(http.MultipartFile.fromBytes(
+  //       'img_file', // NOTE - this value must match the 'file=' at the start of -F
+  //       File(filePath).readAsBytesSync(),
+  //       contentType: MediaType(
+  //         'image',
+  //         'png',
+  //       ),
+  //     ));
+  //     final response = await http.Response.fromStream(await request.send());
 
-  //   // Convert multipart request to JSON
-  //   final requestBody = <String, dynamic>{'img_file': file};
-  //   final jsonBody = jsonEncode(requestBody);
+  //     if (response.statusCode == 200) {
+  //       var decoded = json.decode(response.body);
 
-  //   // Send the request
-  //   final response = await http.post(
-  //     urlReq,
-  //     headers: {'Content-Type': 'application/json'},
-  //     body: jsonBody,
-  //   );
-
-  //   print("response:${response.body}");
-  //   // Check the status code of the response
-  //   if (response.statusCode == 200) {
-  //     print('File uploaded successfully');
-  //   } else {
-  //     print('File upload failed');
+  //       return decoded;
+  //     } else {
+  //       return "failed to post image";
+  //     }
+  //   } catch (e) {
+  //     print("error $e");
   //   }
   // }
+
 }

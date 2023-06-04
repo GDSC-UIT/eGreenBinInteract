@@ -30,6 +30,9 @@ class ScanController extends GetxController {
   CameraController get cameraController => _cameraController;
   bool get isInitialized => _isInitialized.value;
   RxBool isGotFace = false.obs;
+  RxBool isLoading = false.obs;
+  RxString studentName = "".obs;
+  String studentId = "";
   bool isTakeImage = false;
   //create face detector object
   final FaceDetector _faceDetector = FaceDetector(
@@ -77,7 +80,6 @@ class ScanController extends GetxController {
             case "capture":
               {
                 isTakeImage = true;
-                Get.to(CameraScreen());
                 break;
               }
             default:
@@ -94,7 +96,10 @@ class ScanController extends GetxController {
 
   void handleAction(choice) async {
     log("trash label ${trashLabel.value}");
-
+    data = Garbage(
+        studentID: studentId,
+        name: studentName.value,
+        trashLabel: trashLabel.value);
     if (data != null) {
       //check action
       if (choice == "recycle") {
@@ -108,25 +113,22 @@ class ScanController extends GetxController {
       }
 
       try {
-        if (data!.isRight) {
-          if (choice == "recycle") {
-            channel.sink.add("right");
-          } else {
-            channel.sink.add("left");
-          }
-        } else {
-          if (choice == "recycle") {
-            channel.sink.add("left");
-          } else {
-            channel.sink.add("right");
-          }
-        }
-
+        print("call api");
         var response = await HttpService.postRequest(
             url: AppString.URLServer, body: data!.toJson());
+        print("response choose type: $response");
         showEffect(data!.isRight);
-        resetImage();
-        Get.back();
+
+        if (data!.isRight) {
+          //tempary close controll iot
+          if (choice == "recycle") {
+            channel.sink.add("right");
+          } else {
+            channel.sink.add("left");
+          }
+
+          resetImage();
+        }
       } catch (e) {
         Get.snackbar(
           "error occur",
@@ -227,20 +229,13 @@ class ScanController extends GetxController {
       print("have face");
 
       await Future.delayed(const Duration(milliseconds: 200));
-
       await capture();
-      isTakeImage = false;
-      isGotFace.value = true;
 
       try {
-        var response = await HttpService.postFile(
-            AppString.URLAiRecognition, imageTake.value.path);
-
-        String result = response['result'];
-        List<String> parts = result.split('-');
-        String id = parts[0];
-        String name = parts[1];
-        data = Garbage(code: id, name: name);
+        isLoading.value = true;
+        isLoading.value = false;
+        isTakeImage = false;
+        isGotFace.value = true;
       } catch (e) {
         print("error: $e");
       }
@@ -274,6 +269,8 @@ class ScanController extends GetxController {
   }
 
   void resetImage() {
+    studentId = "";
+    studentName.value = "";
     imageTake.value = File("");
     isTakeImage = false;
     isGotFace.value = false;
@@ -285,9 +282,11 @@ class ScanController extends GetxController {
     if (_cameraImage != null) {
       print("capture image");
       img.Image image = _convertYUV420(_cameraImage!);
-      Uint8List list = Uint8List.fromList(img.encodeJpg(image));
+      // Xoay ảnh 90 độ theo chiều kim đồng hồ
+      img.Image rotatedImage = img.copyRotate(image, -90);
+      Uint8List list = Uint8List.fromList(img.encodeJpg(rotatedImage));
       Directory tempDir = await getTemporaryDirectory();
-      File file = await File('${tempDir.path}/image$count.png').create();
+      File file = await File('${tempDir.path}/image$count.jpg').create();
       count++;
       file.writeAsBytesSync(list);
       imageTake.value = file;
